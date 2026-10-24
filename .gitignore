@@ -1,0 +1,8 @@
+PennFudanPed/
+PennFudanPed.zip
+data/
+label_check/
+runs/
+*.pt
+.DS_Store
+.idea/
