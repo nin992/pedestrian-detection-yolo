@@ -1,0 +1,4 @@
+experiment,model,epochs,imgsz,mAP50,mAP50-95,precision,recall,weights
+pretrained_n,yolov8n.pt,50,640,0.982,0.8423,0.9713,0.9666,/content/pedestrian-detection-yolo/runs/detect/runs/pretrained_n/weights/best.pt
+scratch_n,yolov8n.yaml,50,640,0.6958,0.3564,0.5803,0.6717,/content/pedestrian-detection-yolo/runs/detect/runs/scratch_n/weights/best.pt
+scratch_n_150,yolov8n.yaml,150,640,0.9235,0.6043,0.8969,0.8698,/content/pedestrian-detection-yolo/runs/detect/runs/scratch_n_150/weights/best.pt
