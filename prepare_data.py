@@ -46,9 +46,9 @@ def main():
     n = len(images)
     n_train, n_val = int(0.70 * n), int(0.15 * n)
     splits = {
-        "train": images[:n_train],
-        "val": images[n_train:n_train + n_val],
-        "test": images[n_train + n_val:],
+        "train": images[:n_train], #118
+        "val": images[n_train:n_train + n_val], #25
+        "test": images[n_train + n_val:], #27
     }
 
     total_people = 0
