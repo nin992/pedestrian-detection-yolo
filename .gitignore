@@ -6,3 +6,4 @@ runs/
 *.pt
 .DS_Store
 .idea/
+error_analysis/
