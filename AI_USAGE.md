@@ -12,4 +12,3 @@ Tool used: Claude (Anthropic)
 -
 
 ## How I made sure I understand the code
--
