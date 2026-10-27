@@ -7,3 +7,5 @@ runs/
 .DS_Store
 .idea/
 error_analysis/
+models/
+__pycache__/

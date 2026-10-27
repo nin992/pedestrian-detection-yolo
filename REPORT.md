@@ -13,7 +13,7 @@
 ## 3. Experiments and results
 - Exp 1: pretrained vs scratch → 0.982 vs 0.696 mAP50 (50 epochs)
 - Scratch 150 epochs → 0.924: was undertrained, but still worse
-- - Exp 1: pretrained vs scratch → 0.982 vs 0.696 mAP50 (50 epochs)
+- Exp 1: pretrained vs scratch → 0.982 vs 0.696 mAP50 (50 epochs)
 - Scratch 150 epochs → 0.924: was undertrained, but still worse
 - Exp 2: YOLOv8n vs YOLOv8s → mAP50 0.982 vs 0.988, mAP50-95 0.842 vs 0.842
   - s is 3.5× bigger (22.5 MB vs 6.5 MB), 3.3× more compute (28.4 vs 8.6 GFLOPs)
@@ -21,7 +21,15 @@
     3.3× more computation. For this single-class task with limited data, the extra capacity
     brings no meaningful benefit, so I chose YOLOv8n as the final model.
 - Final test set (27 unseen images): mAP50 0.949, mAP50-95 0.782, precision 0.883, recall 0.896
-  (lower than val 0.982, as expected: val was used to choose the model; test is the honest score)
+  (lower than val 0.982, as expected: val was used to choose the model; test is the honest score).
+- Optimization: I compared the original PyTorch model with ONNX, OpenVINO FP32 and OpenVINO INT8 versions on CPU. 
+  INT8 quantization gave the best trade-off: 1.46× faster (84 vs 123 ms per image) and 3.4× smaller than the FP32 exports 
+  (3.7 MB vs 12.8 MB), with almost no accuracy loss (mAP50 0.9794 vs 0.9801). ONNX alone wasn’t faster on this CPU;
+  its benefit is portability.
+- The API’s conf parameter controls the precision/recall trade-off: on the classroom photo, raising it from 0.25 to 0.5 removed the 
+  two weakest boxes (4 → 2 detections). But it can’t fix the missed seated person: a threshold only filters existing detections. 
+  That needs more varied training data.
+- API speed on an M1 MacBook Air (CPU, PyTorch model): first request ~1.5 s (warm-up), then ~190 ms per image.
 
 ## 4. Problems and how I solved them
 - Readme said 345 people, masks gave 423 → checked Annotation files: 423
@@ -49,6 +57,8 @@
   labels (e.g. a woman riding a bicycle, which Penn-Fudan doesn't label as a pedestrian).
   Checked each one by eye: every box at conf ≥ 0.25 was on a real person.
 - So the measured precision (0.883) underestimates the model's real precision on these images.
+- Runs in real time on a normal laptop CPU (~190 ms/image, no GPU needed).
+
 
 ## 6. What I'd improve with more time
 - More varied training data (indoor, seated, crowds)
