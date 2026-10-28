@@ -1,3 +1,16 @@
+"""
+train.py
+Trains a YOLOv8 model on the Penn-Fudan YOLO dataset, then evaluates it on the
+validation split and adds one row to experiments.csv.
+
+Examples:
+    # Experiment 1a: start from pretrained weights (already learned from the COCO dataset)
+    python train.py --model yolov8n.pt --name pretrained_n
+
+    # Experiment 1b: same architecture, random starting weights (from scratch)
+    python train.py --model yolov8n.yaml --name scratch_n
+"""
+
 
 import argparse
 import csv

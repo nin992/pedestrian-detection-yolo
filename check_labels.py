@@ -1,3 +1,12 @@
+"""
+check_labels.py
+Sanity check for prepare_data.py: draws the saved YOLO labels back onto a few
+random images, so you can see by eye that every box sits on a pedestrian.
+
+Usage:
+    python check_labels.py --split train --n 4    # images saved to label_check/
+"""
+
 import argparse
 import random
 from pathlib import Path

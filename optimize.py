@@ -1,3 +1,20 @@
+"""
+optimize.py
+Makes the trained model faster / smaller and measures what that costs.
+
+Versions compared (all on the validation split, on CPU, batch 1):
+    1. PyTorch .pt    - the original best.pt (baseline; Ultralytics stores it as FP16)
+    2. ONNX FP32      - same weights in a portable, framework-independent format
+    3. OpenVINO FP32  - Intel's CPU-optimized runtime
+    4. OpenVINO INT8  - weights stored as 8-bit integers instead of 32-bit floats
+                        (quantization: smaller, usually faster, small accuracy cost)
+
+Results go to optimization.csv.
+
+Usage (on Colab):
+    python optimize.py --weights runs/detect/runs/pretrained_n/weights/best.pt
+"""
+
 import argparse
 import csv
 from pathlib import Path

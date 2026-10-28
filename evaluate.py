@@ -1,3 +1,19 @@
+"""
+evaluate.py
+1. Scores the final model ONCE on the held-out test split (mAP, precision, recall).
+2. Error analysis: for every test image, matches predicted boxes to the real boxes
+   and counts correct detections (TP), false alarms (FP) and misses (FN).
+   Images with mistakes are saved with colored boxes:
+       green  = real person that was found      (TP, ground truth box)
+       red    = real person that was MISSED     (FN)
+       orange = box with no matching real person (FP)
+3. Checks whether the missed people are the "small / heavily occluded" pedestrians
+   listed in PennFudanPed/added-object-list.txt.
+
+Usage:
+    python evaluate.py --weights runs/detect/runs/pretrained_n/weights/best.pt
+"""
+
 
 import argparse
 import json

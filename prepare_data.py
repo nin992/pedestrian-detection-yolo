@@ -1,3 +1,20 @@
+"""
+prepare_data.py
+Converts the Penn-Fudan dataset into YOLO format.
+
+For every image:
+    - reads its mask (PedMasks/<name>_mask.png), where each pedestrian has its own
+      pixel value (1, 2, 3...) and the background is 0
+    - turns each pedestrian's pixels into a bounding box (min/max x and y)
+    - writes the boxes as YOLO labels: "class x_center y_center width height",
+      all normalized to 0-1 by the image size (class 0 = person)
+Then splits the images 70/15/15 into train/val/test with a fixed seed (reproducible)
+and writes data/data.yaml.
+
+Usage:
+    python prepare_data.py            # defaults: --src PennFudanPed --out data --seed 42
+"""
+
 import argparse
 import random
 import shutil
