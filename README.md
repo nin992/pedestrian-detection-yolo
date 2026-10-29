@@ -1,4 +1,4 @@
-# Pedestrian Detection with YOLOv8
+# Pedestrian Detection with YOLOv8 
 
 An end-to-end computer vision project: a model that **finds pedestrians in images** (bounding boxes + people count), built by fine-tuning YOLOv8 on the Penn-Fudan Pedestrian dataset. It covers data preparation, training experiments, evaluation with error analysis, model optimization (ONNX / OpenVINO / INT8), and a FastAPI demo.
 
@@ -71,29 +71,29 @@ Run the scripts in this order.
 **1. Get the dataset.** The Penn-Fudan dataset is not included in this repo (its license does not allow reposting). Download it from the official site:
 
 ```bash
-wget https://www.cis.upenn.edu/~jshi/ped_html/PennFudanPed.zip
-unzip PennFudanPed.zip
+curl -L -O https://www.cis.upenn.edu/~jshi/ped_html/PennFudanPed.zip
+unzip -q PennFudanPed.zip
 ```
 
 **2. Convert to YOLO format and split** (170 images → 118 train / 25 val / 27 test, 423 pedestrians):
 
 ```bash
-python prepare_data.py
+python3 prepare_data.py
 ```
 
 **3. (Optional) Check the labels visually:**
 
 ```bash
-python check_labels.py --split train --n 4      # images saved to label_check/
+python3 check_labels.py --split train --n 4      # images saved to label_check/
 ```
 
 **4. Train** (each run adds a row to `experiments.csv`):
 
 ```bash
-python train.py --model yolov8n.pt   --name pretrained_n                 # final model
-python train.py --model yolov8n.yaml --name scratch_n                    # from scratch
-python train.py --model yolov8n.yaml --epochs 150 --name scratch_n_150
-python train.py --model yolov8s.pt   --name pretrained_s                 # bigger model
+python3 train.py --model yolov8n.pt   --name pretrained_n                 # final model
+python3 train.py --model yolov8n.yaml --name scratch_n                    # from scratch
+python3 train.py --model yolov8n.yaml --epochs 150 --name scratch_n_150
+python3 train.py --model yolov8s.pt   --name pretrained_s                 # bigger model
 ```
 
 Weights are saved to `runs/detect/runs/<name>/weights/best.pt`.
@@ -101,7 +101,7 @@ Weights are saved to `runs/detect/runs/<name>/weights/best.pt`.
 **5. Evaluate on the test set + error analysis:**
 
 ```bash
-python evaluate.py --weights runs/detect/runs/pretrained_n/weights/best.pt
+python3 evaluate.py --weights runs/detect/runs/pretrained_n/weights/best.pt
 ```
 
 Images with mistakes are saved to `error_analysis/` (green = found, red = missed, orange = false positive).
@@ -109,12 +109,27 @@ Images with mistakes are saved to `error_analysis/` (green = found, red = missed
 **6. Optimize and compare formats:**
 
 ```bash
-python optimize.py --weights runs/detect/runs/pretrained_n/weights/best.pt
+python3 optimize.py --weights runs/detect/runs/pretrained_n/weights/best.pt
 ```
 
 ## Trained model
 
-Download the trained model (`best.pt`, 6.5 MB) from the [Releases page](https://github.com/nin992/pedestrian-detection-yolo/releases) and put it in a `models/` folder:
+## Trained model
+
+Download the trained model (`best.pt`, 6.5 MB) from the [Releases page](https://github.com/nin992/pedestrian-detection-yolo/releases), or from the terminal:
+
+```bash
+mkdir -p models
+curl -L -o models/best.pt https://github.com/nin992/pedestrian-detection-yolo/releases/download/v1.0/best.pt
+```
+
+With the downloaded model you can skip training (step 4) and run steps 5 and 6 with `--weights models/best.pt`:
+
+```bash
+python3 evaluate.py --weights models/best.pt
+```
+
+Or retrain it with step 4 above.
 
 ```
 models/best.pt
@@ -142,7 +157,7 @@ Example with curl:
 curl -X POST "http://127.0.0.1:8000/detect?conf=0.25" -F "file=@street.jpg"
 ```
 
-To serve the INT8 OpenVINO model instead (fastest on Intel CPUs):
+To serve the INT8 OpenVINO model instead (fastest on Intel CPUs), first create it with step 6; `optimize.py` saves it next to the weights file (e.g. `models/best_int8_openvino_model/` when run with `--weights models/best.pt`):
 
 ```bash
 MODEL_PATH=models/best_int8_openvino_model uvicorn app:app
