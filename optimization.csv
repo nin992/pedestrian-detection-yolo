@@ -1,0 +1,5 @@
+version,size_MB,mAP50,mAP50-95,inference_ms,device,path
+PyTorch FP32 (baseline),6.51,0.9801,0.8397,123.05,cpu,runs/detect/runs/pretrained_n/weights/best.pt
+ONNX FP32,12.77,0.9797,0.8319,123.95,cpu,runs/detect/runs/pretrained_n/weights/best.onnx
+OpenVINO FP32,12.86,0.9797,0.8319,107.67,cpu,runs/detect/runs/pretrained_n/weights/best_openvino_model/
+OpenVINO INT8,3.73,0.9794,0.8294,84.23,cpu,runs/detect/runs/pretrained_n/weights/best_int8_openvino_model/
